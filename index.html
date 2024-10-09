@@ -1,72 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Login & Sign Up Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="login-wrap">
-    <div class="login-html">
-      <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
-      <label for="tab-1" class="tab">Sign In</label>
-
-      <input id="tab-2" type="radio" name="tab" class="sign-up">
-      <label for="tab-2" class="tab">Sign Up</label>
-
-      <div class="login-form">
-        <!-- Sign In Form -->
-        <div class="sign-in-htm">
-          <div class="group">
-            <label for="signin-username" class="label">Username</label>
-            <input id="signin-username" type="text" class="input" placeholder="Enter your username" required>
-          </div>
-          <div class="group">
-            <label for="signin-password" class="label">Password</label>
-            <input id="signin-password" type="password" class="input" placeholder="Enter your password" required>
-          </div>
-          <div class="group">
-            <input id="keep-signed-in" type="checkbox" class="check" checked>
-            <label for="keep-signed-in"><span class="icon"></span> Keep me Signed in</label>
-          </div>
-          <div class="group">
-            <button type="submit" class="button">Sign In</button>
-          </div>
-          <div class="hr"></div>
-          <div class="foot-lnk">
-            <a href="#forgot">Forgot Password?</a>
-          </div>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Sign In</h2>
+            <form id="loginForm" onsubmit="return validateForm()">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="input-group">
+                    <button type="submit" class="login-btn">Sign In</button>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+            </form>
         </div>
-
-        <!-- Sign Up Form -->
-        <div class="sign-up-htm">
-          <div class="group">
-            <label for="signup-username" class="label">Username</label>
-            <input id="signup-username" type="text" class="input" placeholder="Create a username" required>
-          </div>
-          <div class="group">
-            <label for="signup-password" class="label">Password</label>
-            <input id="signup-password" type="password" class="input" placeholder="Create a password" required>
-          </div>
-          <div class="group">
-            <label for="signup-repeat-password" class="label">Repeat Password</label>
-            <input id="signup-repeat-password" type="password" class="input" placeholder="Repeat your password" required>
-          </div>
-          <div class="group">
-            <label for="signup-email" class="label">Email Address</label>
-            <input id="signup-email" type="email" class="input" placeholder="Enter your email" required>
-          </div>
-          <div class="group">
-            <button type="submit" class="button">Sign Up</button>
-          </div>
-          <div class="hr"></div>
-          <div class="foot-lnk">
-            <label for="tab-1">Already a Member?</label>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+    <script src="script.js"></script>
 </body>
 </html>
