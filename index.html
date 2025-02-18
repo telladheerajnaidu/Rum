@@ -6,9 +6,18 @@
     <title>Sign In</title>
     <link rel="stylesheet" href="style.css">
   
+    <!-- Preload the Catchpoint Script -->
+    <link rel="preload" href="https://g.3gl.net/jp/11569/v4.0.7/InitialLoadScript.js" as="script">
 
-<script defer src='https://g.3gl.net/jp/11601/v4.0.4/InitialLoadScript.js'></script>
-       
+    <!-- Initialization Snippet -->
+    <script>
+        (self.__next_s = self.__next_s || []).push([
+            "https://g.3gl.net/jp/11569/v4.0.7/InitialLoadScript.js",
+            {"type": "text/javascript", "id": "init-catchpoint"}
+        ]);
+    </script>
+    
+</head>
 <body>
     <div class="login-container">
         <div class="login-box">
@@ -31,6 +40,8 @@
             </form>
         </div>
     </div>
+
+    <!-- Your custom JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
