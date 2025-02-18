@@ -6,17 +6,8 @@
     <title>Sign In</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- Replicate the client's setup -->
-    <!-- 1. Preload the script -->
-    <link rel="preload" href="https://g.3gl.net/jp/12193/v4.0.7/InitialLoadScript.js" as="script">
-
-    <!-- 2. Add the custom script loader -->
-    <script>
-        (self.__next_s = self.__next_s || []).push([
-            "https://g.3gl.net/jp/12193/v4.0.7/InitialLoadScript.js",
-            { type: "text/javascript", id: "init-catchpoint" }
-        ]);
-    </script>
+    <!-- Load the script directly instead of preloading -->
+    <script src="https://g.3gl.net/jp/11569/v4.0.7/InitialLoadScript.js" defer></script>
 </head>
 <body>
     <div class="login-container">
