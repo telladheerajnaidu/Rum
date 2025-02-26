@@ -1,6 +1,6 @@
 // Hardcoded correct username and password
-const correctUsername = "123";
-const correctPassword = "123";
+const correctUsername = "Testing";
+const correctPassword = "><#&";
 
 // Function to validate the form on submit
 function validateForm() {
