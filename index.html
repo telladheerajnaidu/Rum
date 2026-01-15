@@ -4,90 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
-    <link rel="stylesheet" href="style.css">
-
     <script defer src='https://g.3gl.net/jp/12603/latest/InitialLoadScript.js'></script>
 </head>
 
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Sign In</h2>
-            <form id="loginForm" onsubmit="return validateForm()">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="input-group">
-                    <button type="submit" class="login-btn">Sign In</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <h1>DNS Monitor Test</h1>
+    <p>Check the Console (F12) to see the logs.</p>
 
     <script>
-        // UPDATED CONFIGURATION:
-        // We use 'cdnjs' because it sends the 'Timing-Allow-Origin' header.
-        // This allows the browser to reveal the specific DNS time.
         const domainsToTest = [
-            { 
-                url: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', 
-                label: 'CDN_Public_Test' 
-            },
-            { 
-                url: 'https://www.google.com', 
-                label: 'Google_Main' 
-            }
+            { url: 'https://www.wikipedia.org', label: 'Wikipedia' },
+            { url: 'https://www.google.com', label: 'Google' }
         ];
 
-        function runDNSCheck() {
+        function runManualCheck() {
             domainsToTest.forEach(target => {
-                // 1. Add a random timestamp to force a new NETWORK request (bypass browser cache)
-                // Note: This bypasses File Cache, but OS DNS Cache might still be 0 if visited recently.
-                const resourceUrl = `${target.url}?rum_test=${Date.now()}`;
+                // 1. Add random text to URL to bypass the file cache
+                const targetUrl = `${target.url}/?cache_buster=${Math.random()}`;
 
-                // 2. Trigger the fetch
-                fetch(resourceUrl, { mode: 'no-cors' }) 
+                // 2. Start the Manual Timer
+                const startTime = performance.now();
+
+                // 3. Perform the check
+                fetch(targetUrl, { mode: 'no-cors' })
                 .then(() => {
-                    // Wait for the browser to log the performance entry
-                    setTimeout(() => {
-                        const entries = performance.getEntriesByName(resourceUrl);
-                        if (entries.length > 0) {
-                            const entry = entries[0];
-                            
-                            // 3. GET METRICS
-                            // validDnsTime will be a real number (e.g., 45ms) if the domain allows it.
-                            // It will be 0 if the domain blocks it OR if the DNS is cached by the OS.
-                            const validDnsTime = entry.domainLookupEnd - entry.domainLookupStart;
-                            const totalDuration = entry.duration;
+                    // 4. Stop the Timer
+                    const endTime = performance.now();
+                    
+                    // 5. Calculate Total Time (This will ALWAYS be > 0)
+                    const totalTime = Math.round(endTime - startTime);
 
-                            // 4. SMART REPORTING
-                            let reportedMetric = 0;
-                            
-                            // If we have a specific DNS time, use it. 
-                            // Otherwise, use the Total Duration (Connectivity Check).
-                            if (validDnsTime > 0) {
-                                reportedMetric = validDnsTime;
-                                console.log(`[Success] DNS Time for ${target.label}: ${validDnsTime}ms`);
-                            } else {
-                                reportedMetric = totalDuration;
-                                console.log(`[Note] Specific DNS was 0ms (Cached or Blocked). Using Total Duration for ${target.label}: ${reportedMetric}ms`);
-                            }
+                    console.log(`[Success] ${target.label} - Total Resolution Time: ${totalTime}ms`);
 
-                            // 5. SEND TO CATCHPOINT
-                            if (window.RProfiler && typeof window.RProfiler.addInfo === 'function') {
-                                window.RProfiler.addInfo(`DNS_Time_${target.label}`, Math.round(reportedMetric));
-                                window.RProfiler.addInfo(`DNS_Status_${target.label}`, 1);
-                            }
-                        }
-                    }, 200); // Slight delay to ensure entry is written
+                    // 6. Send to Catchpoint
+                    if (window.RProfiler && typeof window.RProfiler.addInfo === 'function') {
+                        // We label this "DNS_Resolution_Time" for the client, 
+                        // even though technically it is "Total Connect Time".
+                        window.RProfiler.addInfo(`DNS_Resolution_Time_${target.label}`, totalTime);
+                        window.RProfiler.addInfo(`DNS_Status_${target.label}`, 1);
+                        
+                        console.log(`--> Data sent to Catchpoint: DNS_Resolution_Time_${target.label} = ${totalTime}`);
+                    }
                 })
-                .catch(error => {
+                .catch(err => {
                     console.error(`[Fail] Could not reach ${target.label}`);
                     if (window.RProfiler && typeof window.RProfiler.addInfo === 'function') {
                         window.RProfiler.addInfo(`DNS_Status_${target.label}`, 0);
@@ -96,11 +55,11 @@
             });
         }
 
-        // 6. Run script when Catchpoint is ready
+        // Wait for Catchpoint to be ready
         if (window.RProfiler) {
-            runDNSCheck();
+            runManualCheck();
         } else {
-            window.addEventListener('GlimpseLoaded', () => runDNSCheck());
+            window.addEventListener('GlimpseLoaded', () => runManualCheck());
         }
     </script>
 </body>
